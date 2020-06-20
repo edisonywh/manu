@@ -1,21 +1,32 @@
 # Manu
 
-**TODO: Add description**
+## WARNING 🚨: Manu is a proof-of-concept to see how it would look like to use changesets with our test factories.
 
-## Installation
+Manu allow you to create your test data and associations with custom changesets.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `manu` to your list of dependencies in `mix.exs`:
+# Why Manu?
 
-```elixir
-def deps do
-  [
-    {:manu, "~> 0.1.0"}
-  ]
-end
-```
+ExMachina is the popular alternative, but it does not come with good changeset support, and that is what Manu is trying to solve.
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/manu](https://hexdocs.pm/manu).
+Disclaimer: I am not a heavy user of ExMachina so perhaps there are ways/patterns to make it work, I just find it peculiar that people seem to dislike it and I'd like to understand why and maybe start a conversation around it.
 
+For reference: https://github.com/thoughtbot/ex_machina/pull/78
+
+# What does Manu do different from ExMachina?
+  - Everything is validated with changesets.
+  - Encourages use of changesets, which is good to do.
+  - Allows you to specify a changeset to be used while building a struct.
+
+# Cons
+- Usage can potentially get ugly, for example, the calls can look like so:
+  - build(User)
+  - build(User, :default)
+  - build(User, :with_gmail)
+  - build(User, :default, %{name: "new_name"})
+  - build(User, :default, %{}, with: &User.email_changeset/2)
+
+# Caveat
+- Take `cast_assoc` and `put_assoc` for example, `cast` expects a map and `put` expects a struct, Manu follows the same way, so you need to be mindful about using `build` vs `params_for`.
+
+# Example
+For examples, look over in `manu_tests.exs`
